@@ -75,11 +75,64 @@ a {
   align-items: center;
   justify-content: center;
   padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.home::before,
+.home::after {
+  content: '';
+  position: absolute;
+  width: min(60vw, 640px);
+  height: min(60vw, 640px);
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.16;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home::before {
+  background: var(--marquee);
+  top: -12%;
+  left: -12%;
+  animation: home-glow-a 15s ease-in-out infinite alternate;
+}
+
+.home::after {
+  background: var(--teal);
+  bottom: -16%;
+  right: -12%;
+  animation: home-glow-b 18s ease-in-out infinite alternate;
+}
+
+@keyframes home-glow-a {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(6%, 8%) scale(1.1); }
+}
+
+@keyframes home-glow-b {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(-8%, -6%) scale(1.12); }
 }
 
 .home-inner {
   width: 100%;
   max-width: 420px;
+  position: relative;
+  z-index: 1;
+  animation: home-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes home-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .marquee-title {
@@ -133,8 +186,16 @@ a {
 .home-subtitle {
   text-align: center;
   color: var(--text-muted);
-  font-size: 15px;
+  font-size: 15.5px;
+  letter-spacing: 0.01em;
   margin: -22px 0 32px;
+  opacity: 0;
+  animation: home-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) 150ms both;
+}
+
+.home-subtitle-accent {
+  color: var(--marquee);
+  font-weight: 600;
 }
 
 .panel {
@@ -145,6 +206,7 @@ a {
 }
 
 .tab-row {
+  position: relative;
   display: flex;
   gap: 4px;
   background: var(--bg-input);
@@ -154,7 +216,21 @@ a {
   margin-bottom: 20px;
 }
 
+.tab-row-indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  background: var(--bg-panel-raised);
+  border-radius: 4px;
+  transition: transform 320ms cubic-bezier(0.65, 0, 0.35, 1);
+  z-index: 0;
+}
+
 .tab-row button {
+  position: relative;
+  z-index: 1;
   flex: 1;
   background: transparent;
   border: none;
@@ -164,11 +240,26 @@ a {
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
+  transition: color 200ms ease;
 }
 
 .tab-row button.active {
-  background: var(--bg-panel-raised);
   color: var(--text);
+}
+
+.form-fade {
+  animation: form-fade-in 0.35s ease both;
+}
+
+@keyframes form-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .field {
@@ -190,10 +281,12 @@ a {
   padding: 11px 12px;
   color: var(--text);
   font-size: 15px;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
 .field input:focus {
   border-color: var(--marquee-dim);
+  box-shadow: 0 0 0 3px rgba(232, 179, 61, 0.14);
 }
 
 .btn {
@@ -208,6 +301,15 @@ a {
   font-weight: 600;
   cursor: pointer;
   width: 100%;
+  transition: background-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
 }
 
 .btn:disabled {
@@ -222,6 +324,7 @@ a {
 
 .btn-primary:hover:not(:disabled) {
   background: #f0c158;
+  box-shadow: 0 8px 20px -8px rgba(232, 179, 61, 0.55);
 }
 
 .btn-secondary {
@@ -254,6 +357,18 @@ a {
   color: var(--danger);
   font-size: 13px;
   margin: -8px 0 16px;
+  animation: form-error-in 0.25s ease both;
+}
+
+@keyframes form-error-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ---------- Room layout ---------- */
@@ -612,7 +727,16 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee-lights span {
-    animation: none;
+  .marquee-lights span,
+  .home::before,
+  .home::after,
+  .home-inner,
+  .home-subtitle,
+  .form-fade,
+  .form-error,
+  .tab-row-indicator,
+  .btn {
+    animation: none !important;
+    transition: none !important;
   }
 }

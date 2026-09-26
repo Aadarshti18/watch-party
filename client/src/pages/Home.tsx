@@ -51,10 +51,17 @@ export default function Home({ initialRoomCode, onEntered }: HomeProps) {
             <span key={i} />
           ))}
         </div>
-        <p className="home-subtitle">Watch YouTube videos in sync, together.</p>
+        <p className="home-subtitle">
+          Watch YouTube videos in sync, <span className="home-subtitle-accent">together</span>.
+        </p>
 
         <div className="panel">
           <div className="tab-row" role="tablist">
+            <div
+              className="tab-row-indicator"
+              style={{ transform: tab === 'join' ? 'translateX(100%)' : 'translateX(0)' }}
+              aria-hidden="true"
+            />
             <button
               type="button"
               role="tab"
@@ -80,7 +87,7 @@ export default function Home({ initialRoomCode, onEntered }: HomeProps) {
           </div>
 
           {tab === 'create' ? (
-            <form onSubmit={handleCreate}>
+            <form key="create" className="form-fade" onSubmit={handleCreate}>
               <div className="field">
                 <label htmlFor="create-name">Your name</label>
                 <input
@@ -98,7 +105,7 @@ export default function Home({ initialRoomCode, onEntered }: HomeProps) {
               </button>
             </form>
           ) : (
-            <form onSubmit={handleJoin}>
+            <form key="join" className="form-fade" onSubmit={handleJoin}>
               <div className="field">
                 <label htmlFor="join-code">Room code</label>
                 <input
