@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Clapperboard, Hash, LogIn, User, UserPlus } from 'lucide-react';
 import { socket } from '../socket';
 import type { CreateRoomAck, FailedAck, JoinRoomAck, Participant, RoomSnapshot } from '../types';
 
@@ -45,7 +46,10 @@ export default function Home({ initialRoomCode, onEntered }: HomeProps) {
   return (
     <div className="home">
       <div className="home-inner">
-        <h1 className="marquee-title">Watch Party</h1>
+        <h1 className="marquee-title">
+          <Clapperboard className="title-icon" size={34} strokeWidth={2} aria-hidden="true" />
+          Watch Party
+        </h1>
         <div className="marquee-lights" aria-hidden="true">
           {Array.from({ length: 7 }).map((_, i) => (
             <span key={i} />
@@ -71,6 +75,7 @@ export default function Home({ initialRoomCode, onEntered }: HomeProps) {
                 setError(null);
               }}
             >
+              <UserPlus size={15} aria-hidden="true" />
               Create a room
             </button>
             <button
@@ -82,6 +87,7 @@ export default function Home({ initialRoomCode, onEntered }: HomeProps) {
                 setError(null);
               }}
             >
+              <LogIn size={15} aria-hidden="true" />
               Join a room
             </button>
           </div>
@@ -90,17 +96,21 @@ export default function Home({ initialRoomCode, onEntered }: HomeProps) {
             <form key="create" className="form-fade" onSubmit={handleCreate}>
               <div className="field">
                 <label htmlFor="create-name">Your name</label>
-                <input
-                  id="create-name"
-                  value={username}
-                  maxLength={24}
-                  placeholder="e.g. Priya"
-                  onChange={(e) => setUsername(e.target.value)}
-                  autoFocus
-                />
+                <div className="input-icon">
+                  <User size={16} aria-hidden="true" />
+                  <input
+                    id="create-name"
+                    value={username}
+                    maxLength={24}
+                    placeholder="e.g. Priya"
+                    onChange={(e) => setUsername(e.target.value)}
+                    autoFocus
+                  />
+                </div>
               </div>
               {error && <p className="form-error">{error}</p>}
               <button className="btn btn-primary" disabled={busy || !username.trim()}>
+                <UserPlus size={16} aria-hidden="true" />
                 {busy ? 'Creating…' : 'Create room'}
               </button>
             </form>
@@ -108,27 +118,34 @@ export default function Home({ initialRoomCode, onEntered }: HomeProps) {
             <form key="join" className="form-fade" onSubmit={handleJoin}>
               <div className="field">
                 <label htmlFor="join-code">Room code</label>
-                <input
-                  id="join-code"
-                  value={roomCode}
-                  maxLength={8}
-                  placeholder="e.g. 7K3PQR"
-                  onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-                  autoFocus={!initialRoomCode}
-                />
+                <div className="input-icon">
+                  <Hash size={16} aria-hidden="true" />
+                  <input
+                    id="join-code"
+                    value={roomCode}
+                    maxLength={8}
+                    placeholder="e.g. 7K3PQR"
+                    onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
+                    autoFocus={!initialRoomCode}
+                  />
+                </div>
               </div>
               <div className="field">
                 <label htmlFor="join-name">Your name</label>
-                <input
-                  id="join-name"
-                  value={username}
-                  maxLength={24}
-                  placeholder="e.g. Priya"
-                  onChange={(e) => setUsername(e.target.value)}
-                />
+                <div className="input-icon">
+                  <User size={16} aria-hidden="true" />
+                  <input
+                    id="join-name"
+                    value={username}
+                    maxLength={24}
+                    placeholder="e.g. Priya"
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </div>
               </div>
               {error && <p className="form-error">{error}</p>}
               <button className="btn btn-primary" disabled={busy || !username.trim() || !roomCode.trim()}>
+                <LogIn size={16} aria-hidden="true" />
                 {busy ? 'Joining…' : 'Join room'}
               </button>
             </form>

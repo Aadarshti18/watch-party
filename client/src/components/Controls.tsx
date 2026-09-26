@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Film, Info, Pause, Play } from 'lucide-react';
 import type { PlaybackState } from '../types';
 import { formatTime, extractYouTubeVideoId } from '../utils';
 
@@ -62,7 +63,11 @@ export default function Controls({
           aria-label={playback.playState === 'playing' ? 'Pause' : 'Play'}
           title={canControl ? undefined : 'Request control to use this'}
         >
-          {playback.playState === 'playing' ? '❚❚' : '▶'}
+          {playback.playState === 'playing' ? (
+            <Pause size={16} fill="currentColor" aria-hidden="true" />
+          ) : (
+            <Play size={16} fill="currentColor" aria-hidden="true" />
+          )}
         </button>
 
         <span style={{ fontSize: 13, color: 'var(--text-muted)', minWidth: 42 }}>{formatTime(displayTime)}</span>
@@ -99,6 +104,7 @@ export default function Controls({
           placeholder="Paste a YouTube link to change the video"
         />
         <button type="submit" className="btn btn-secondary btn-small">
+          <Film size={14} aria-hidden="true" />
           {canControl ? 'Change video' : 'Request change'}
         </button>
       </form>
@@ -106,6 +112,7 @@ export default function Controls({
 
       {!canControl && (
         <p className="control-notice">
+          <Info size={14} aria-hidden="true" />
           You're watching only. Using a control above sends a request to the host or a moderator.
         </p>
       )}

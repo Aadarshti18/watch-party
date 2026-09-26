@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { MessageCircle, Send } from 'lucide-react';
 import type { ChatMessage } from '../types';
 
 interface ChatProps {
@@ -25,11 +26,21 @@ export default function Chat({ messages, onSend }: ChatProps) {
   return (
     <div className="sidebar-panel chat-panel" style={{ padding: 0 }}>
       <div className="chat-messages" ref={scrollRef}>
-        {messages.length === 0 && <div className="empty-state">No messages yet. Say hello.</div>}
+        {messages.length === 0 && (
+          <div className="empty-state">
+            <MessageCircle size={26} aria-hidden="true" />
+            <span>No messages yet. Say hello 👋</span>
+          </div>
+        )}
         {messages.map((m) => (
           <div className="chat-message" key={m.id}>
-            <span className="author">{m.username}</span>
-            <span className="text">{m.text}</span>
+            <span className="chat-avatar" aria-hidden="true">
+              {m.username.charAt(0).toUpperCase()}
+            </span>
+            <span className="chat-message-body">
+              <span className="author">{m.username}</span>
+              <span className="text">{m.text}</span>
+            </span>
           </div>
         ))}
       </div>
@@ -41,6 +52,7 @@ export default function Chat({ messages, onSend }: ChatProps) {
           placeholder="Send a message"
         />
         <button type="submit" className="btn btn-primary btn-small">
+          <Send size={13} aria-hidden="true" />
           Send
         </button>
       </form>

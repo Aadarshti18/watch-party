@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Clapperboard, Copy, Hand, LogOut, MessageCircle, Users } from 'lucide-react';
 import { socket } from '../socket';
 import YouTubePlayer, { type YouTubePlayerHandle } from '../components/YouTubePlayer';
 import Controls from '../components/Controls';
@@ -63,23 +64,23 @@ export default function Room({ initialSnapshot, initialYou, onLeave }: RoomProps
     }
     function onUserJoined(data: { participants: Participant[]; username: string }) {
       setParticipants(data.participants);
-      pushToast(`${data.username} joined.`);
+      pushToast(`🎉 ${data.username} joined.`);
     }
     function onUserLeft(data: { participants: Participant[]; username: string }) {
       setParticipants(data.participants);
-      pushToast(`${data.username} left.`);
+      pushToast(`👋 ${data.username} left.`);
     }
     function onRoleAssigned(data: { participants: Participant[]; username: string; role: Role }) {
       setParticipants(data.participants);
-      pushToast(`${data.username} is now ${data.role}.`);
+      pushToast(`⭐ ${data.username} is now ${data.role}.`);
     }
     function onHostTransferred(data: { participants: Participant[]; newHostUsername: string }) {
       setParticipants(data.participants);
-      pushToast(`${data.newHostUsername} is now the host.`);
+      pushToast(`👑 ${data.newHostUsername} is now the host.`);
     }
     function onParticipantRemoved(data: { participants: Participant[]; userId: string; youWereRemoved?: boolean }) {
       if (data.youWereRemoved) {
-        pushToast('You were removed from the room.', true);
+        pushToast('🚫 You were removed from the room.', true);
         onLeave();
         return;
       }
@@ -87,16 +88,16 @@ export default function Room({ initialSnapshot, initialYou, onLeave }: RoomProps
     }
     function onControlRequested(request: PendingRequest) {
       setPendingRequests((prev) => [...prev.filter((r) => r.requestId !== request.requestId), request]);
-      pushToast(`${request.username} requested control.`);
+      pushToast(`🙋 ${request.username} requested control.`);
     }
     function onPendingRequestsUpdated(requests: PendingRequest[]) {
       setPendingRequests(requests);
     }
     function onRequestApproved() {
-      pushToast('Your request was approved.');
+      pushToast('✅ Your request was approved.');
     }
     function onRequestDenied() {
-      pushToast('Your request was denied.', true);
+      pushToast('🚫 Your request was denied.', true);
     }
     function onChatMessage(message: ChatMessage) {
       setChatMessages((prev) => [...prev, message]);
@@ -163,7 +164,10 @@ export default function Room({ initialSnapshot, initialYou, onLeave }: RoomProps
   return (
     <div className="room">
       <header className="room-header">
-        <span className="brand">Watch Party</span>
+        <span className="brand">
+          <Clapperboard size={20} aria-hidden="true" />
+          Watch Party
+        </span>
         <div className="room-code">
           <span>
             Room code: <strong>{initialSnapshot.roomId}</strong>
@@ -173,12 +177,14 @@ export default function Room({ initialSnapshot, initialYou, onLeave }: RoomProps
             className="btn btn-secondary btn-small"
             onClick={() => {
               navigator.clipboard?.writeText(initialSnapshot.roomId);
-              pushToast('Room code copied.');
+              pushToast('🔗 Room code copied.');
             }}
           >
+            <Copy size={13} aria-hidden="true" />
             Copy
           </button>
           <button type="button" className="btn btn-danger btn-small" onClick={handleLeave}>
+            <LogOut size={13} aria-hidden="true" />
             Leave
           </button>
         </div>
@@ -190,7 +196,8 @@ export default function Room({ initialSnapshot, initialYou, onLeave }: RoomProps
             <YouTubePlayer ref={playerRef} />
             {!playback.videoId && (
               <div className="video-empty">
-                {canControl ? 'Paste a YouTube link below to start watching.' : 'Waiting for the host to pick a video.'}
+                <Clapperboard size={32} className="video-empty-icon" aria-hidden="true" />
+                <span>{canControl ? 'Paste a YouTube link below to start watching.' : 'Waiting for the host to pick a video.'}</span>
               </div>
             )}
           </div>
@@ -209,16 +216,19 @@ export default function Room({ initialSnapshot, initialYou, onLeave }: RoomProps
         <aside className="sidebar">
           <div className="sidebar-tabs">
             <button type="button" className={tab === 'participants' ? 'active' : ''} onClick={() => setTab('participants')}>
+              <Users size={15} aria-hidden="true" />
               People
               <span className="badge-count">{participants.length}</span>
             </button>
             {canControl && (
               <button type="button" className={tab === 'requests' ? 'active' : ''} onClick={() => setTab('requests')}>
+                <Hand size={15} aria-hidden="true" />
                 Requests
                 {pendingRequests.length > 0 && <span className="badge-count">{pendingRequests.length}</span>}
               </button>
             )}
             <button type="button" className={tab === 'chat' ? 'active' : ''} onClick={() => setTab('chat')}>
+              <MessageCircle size={15} aria-hidden="true" />
               Chat
             </button>
           </div>
