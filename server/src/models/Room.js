@@ -3,6 +3,10 @@ const { generateId } = require('../utils/idGenerator');
 
 const MAX_CHAT_HISTORY = 100;
 
+// New rooms start on this video (paused, ready to play) instead of a blank
+// player. The host can still change it any time via change_video.
+const DEFAULT_VIDEO_ID = 'B-2BCSxnyHA';
+
 /**
  * A single watch party room. Owns:
  *  - the participant list (Map<socketId, Participant>)
@@ -25,7 +29,7 @@ class Room {
     this.hostId = hostId;
 
     this.playback = {
-      videoId: null,
+      videoId: DEFAULT_VIDEO_ID,
       playState: 'paused', // 'playing' | 'paused'
       currentTime: 0,
       updatedAt: Date.now(),

@@ -173,10 +173,6 @@ a {
   pointer-events: none;
 }
 
-.input-icon input {
-  padding-left: 38px;
-}
-
 .marquee-lights {
   display: flex;
   justify-content: center;
@@ -320,6 +316,10 @@ a {
 .field input:focus {
   border-color: var(--marquee-dim);
   box-shadow: 0 0 0 3px rgba(232, 179, 61, 0.14);
+}
+
+.field .input-icon input {
+  padding-left: 38px;
 }
 
 .btn {

@@ -79,10 +79,13 @@ const YouTubePlayer = forwardRef<YouTubePlayerHandle>(function YouTubePlayer(_pr
 
     if (state.videoId !== loadedVideoIdRef.current) {
       loadedVideoIdRef.current = state.videoId;
-      player.loadVideoById(state.videoId, state.currentTime || 0);
-      if (state.playState === 'paused') {
-        // loadVideoById auto-plays; correct it shortly after the cue completes.
-        setTimeout(() => player.pauseVideo?.(), 250);
+      if (state.playState === 'playing') {
+        player.loadVideoById(state.videoId, state.currentTime || 0);
+      } else {
+        // cueVideoById shows the thumbnail/first frame and gets the player
+        // ready without autoplaying - correct for a room's starting video,
+        // or any video change that lands on a paused state.
+        player.cueVideoById(state.videoId, state.currentTime || 0);
       }
       return;
     }
